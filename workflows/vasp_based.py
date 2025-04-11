@@ -18,7 +18,8 @@ def vasp_calculations(config):
 
     fused_vasp_calc_init_perf().result()
     exec_time = -1
-    # open the output file to log the structures that failed or succeded to converge
+    # open the output file to log the structures that failed or succeded to
+    # converge
     fp = open(output_file_vasp_calc, 'w')
     fp.write("id,result\n")
 
@@ -96,12 +97,14 @@ def run_cgcnn(config):
 def run_workflow(config):
     logging.info("Start the 'vasp_based' workflow'")
     time_gen_struct = -1
-    if not os.path.exists(os.path.join(config["work_dir"], 'structures/1.cif')):
+    if not os.path.exists(os.path.join(
+            config["work_dir"], 'structures/1.cif')):
         time_gen_struct = generate_structures(config)
     logging.info(f"generate_structures done: {time_gen_struct}")
 
     time_cgcnn = -1
-    if not os.path.exists(os.path.join(config["work_dir"], 'test_results.csv')):
+    if not os.path.exists(os.path.join(
+            config["work_dir"], 'test_results.csv')):
         time_cgcnn = run_cgcnn(config)
     logging.info(f"cgcnn done: {time_cgcnn}")
 

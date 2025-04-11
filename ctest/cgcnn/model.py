@@ -24,11 +24,11 @@ class ConvLayer(nn.Module):
         super(ConvLayer, self).__init__()
         self.atom_fea_len = atom_fea_len
         self.nbr_fea_len = nbr_fea_len
-        self.fc_full = nn.Linear(2*self.atom_fea_len+self.nbr_fea_len,
-                                 2*self.atom_fea_len)
+        self.fc_full = nn.Linear(2 * self.atom_fea_len + self.nbr_fea_len,
+                                 2 * self.atom_fea_len)
         self.sigmoid = nn.Sigmoid()
         self.softplus1 = nn.Softplus()
-        self.bn1 = nn.BatchNorm1d(2*self.atom_fea_len)
+        self.bn1 = nn.BatchNorm1d(2 * self.atom_fea_len)
         self.bn2 = nn.BatchNorm1d(self.atom_fea_len)
         self.softplus2 = nn.Softplus()
 
@@ -65,7 +65,7 @@ class ConvLayer(nn.Module):
              atom_nbr_fea, nbr_fea], dim=2)
         total_gated_fea = self.fc_full(total_nbr_fea)
         total_gated_fea = self.bn1(total_gated_fea.view(
-            -1, self.atom_fea_len*2)).view(N, M, self.atom_fea_len*2)
+            -1, self.atom_fea_len * 2)).view(N, M, self.atom_fea_len * 2)
         nbr_filter, nbr_core = total_gated_fea.chunk(2, dim=2)
         nbr_filter = self.sigmoid(nbr_filter)
         nbr_core = self.softplus1(nbr_core)
@@ -113,9 +113,9 @@ class CrystalGraphConvNet(nn.Module):
         self.conv_to_fc_softplus = nn.Softplus()
         if n_h > 1:
             self.fcs = nn.ModuleList([nn.Linear(h_fea_len, h_fea_len)
-                                      for _ in range(n_h-1)])
+                                      for _ in range(n_h - 1)])
             self.softpluses = nn.ModuleList([nn.Softplus()
-                                             for _ in range(n_h-1)])
+                                             for _ in range(n_h - 1)])
         if self.classification:
             self.fc_out = nn.Linear(h_fea_len, 2)
         else:

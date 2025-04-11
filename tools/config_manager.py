@@ -28,27 +28,28 @@ def _find_next_vasp_structure(work_dir):
 
 
 class ConfigManager:
-    # required arguments: must exist in JSON config or be provided as cmd line args
+    # required arguments: must exist in JSON config or be provided as cmd line
+    # args
     REQUIRED_PARAMS = {
-        "cms_dir":       (str, "Path to the CMS directory (required)."),
-        "vasp_std_exe":  (str, "Path to the VASP executable (required)."),
-        "work_dir":      (str, "Root working directory (required)."),
+        "cms_dir": (str, "Path to the CMS directory (required)."),
+        "vasp_std_exe": (str, "Path to the VASP executable (required)."),
+        "work_dir": (str, "Root working directory (required)."),
         "vasp_work_dir": (str, "Working directory for VASP-specific operations (required)."),
-        "pot_dir":       (str, "Path to potpaw (required)."),
-        "output_file":   (str, "Output file path (required)."),
-        "elements":      (str, "Elements, e.g. 'Ce-Co-B' (required)."),
-        "parsl_config":  (str, "Parsl config name, previously registered (required).")
+        "pot_dir": (str, "Path to potpaw (required)."),
+        "output_file": (str, "Output file path (required)."),
+        "elements": (str, "Elements, e.g. 'Ce-Co-B' (required)."),
+        "parsl_config": (str, "Parsl config name, previously registered (required).")
     }
 
    # optional arguments: if absent, assign defaults.
     OPTIONAL_PARAMS = {
-        "ef_thr":       (-0.2,  "ef threshold."),
-        "num_workers":  (128,   "Number of OpenMP threads."),
-        "batch_size":   (256,   "Batch size for CGCNN."),
-        "vasp_nnodes":  (1,     "Number of nodes used for VASP calculations."),
-        "num_strs":     (-1,    "Number of structures to process (-1 means all)."),
-        "vasp_timeout":     (1800,  "Max walltime in seconds for a vasp calculation."),
-        "force_conv":   (100,   "Force convergence threshold."),
+        "ef_thr": (-0.2, "ef threshold."),
+        "num_workers": (128, "Number of OpenMP threads."),
+        "batch_size": (256, "Batch size for CGCNN."),
+        "vasp_nnodes": (1, "Number of nodes used for VASP calculations."),
+        "num_strs": (-1, "Number of structures to process (-1 means all)."),
+        "vasp_timeout": (1800, "Max walltime in seconds for a vasp calculation."),
+        "force_conv": (100, "Force convergence threshold."),
         "output_level": ("INFO", "Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL"),
     }
 

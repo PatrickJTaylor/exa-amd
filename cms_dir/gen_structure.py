@@ -31,7 +31,8 @@ def generate_structures(structure_file, elements, dirs):
     elements_to_substitute = [element.symbol for element in original_structure.composition
                               if element.symbol not in badele_vec]
 
-    # If we don't have exactly three elements to substitute, skip this structure
+    # If we don't have exactly three elements to substitute, skip this
+    # structure
     if len(elements_to_substitute) != 3:
         return []
 
@@ -67,7 +68,7 @@ def main(args):
     structure_files = [f for f in os.listdir(dirs) if f.endswith('.cif')]
     elements = [ele for ele in args.elements.split('-')]
 
-    args_list = [(f, i*30+1, dirs, elements)
+    args_list = [(f, i * 30 + 1, dirs, elements)
                  for i, f in enumerate(structure_files)]
 
     with Pool(num_workers) as pool:
@@ -76,8 +77,8 @@ def main(args):
     total_structures = sum(results)
     print(f"Total structures generated: {total_structures}")
     with open('id_prop.csv', 'w+') as f:
-        for i in range(1, total_structures+1):
-            f.write(str(i)+',0.5'+'\n')
+        for i in range(1, total_structures + 1):
+            f.write(str(i) + ',0.5' + '\n')
 
 
 if __name__ == "__main__":

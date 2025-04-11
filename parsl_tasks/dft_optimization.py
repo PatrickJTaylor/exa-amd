@@ -78,5 +78,5 @@ def fused_vasp_calc(config, id, walltime=(int)):
 
 
 def run_vasp_calc(config, id):
-    f_vasp = fused_vasp_calc(config, id, walltime=2*config["vasp_timeout"])
+    f_vasp = fused_vasp_calc(config, id, walltime=2 * config["vasp_timeout"])
     return f_vasp, id

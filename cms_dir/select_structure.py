@@ -31,14 +31,15 @@ def read_csv(csv_file, ef_threshold):
             break
         structures_data[index] = ef
 
-    # If we have fewer than min_structures, take the first min_structures regardless of ef_threshold
+    # If we have fewer than min_structures, take the first min_structures
+    # regardless of ef_threshold
     if len(structures_data) < min_structures:
         structures_data = {}
         for i, (index, ef) in enumerate(all_structures):
             if i >= min_structures:
                 break
             structures_data[index] = ef
-        actual_ef_threshold = all_structures[min_structures-1][1] if len(
+        actual_ef_threshold = all_structures[min_structures - 1][1] if len(
             all_structures) >= min_structures else all_structures[-1][1]
         print(
             f"Adjusted Ef threshold to {actual_ef_threshold:.3f} to ensure minimum of {min_structures} structures")
@@ -49,7 +50,8 @@ def read_csv(csv_file, ef_threshold):
     return structures_data
 
 
-def process_structures(task_queue, result_queue, nomix_dir, natom_threshold, element_fractions):
+def process_structures(task_queue, result_queue, nomix_dir,
+                       natom_threshold, element_fractions):
     while True:
         task = task_queue.get()
         if task is None:
@@ -70,7 +72,8 @@ def process_structures(task_queue, result_queue, nomix_dir, natom_threshold, ele
         # Check element fractions
         if len(element_fractions) > 0:
             for element, min_fraction in element_fractions.items():
-                if composition.get_atomic_fraction(Element(element)) < min_fraction:
+                if composition.get_atomic_fraction(
+                        Element(element)) < min_fraction:
                     flag = 1
                     break
 
@@ -95,7 +98,8 @@ def select_structures_for_compositions(task_queue, result_queue, matcher):
         result_queue.put((composition, selected))
 
 
-def select_structures(nomix_dir, output_dir, csv_file, ef_threshold, min_total, max_total, num_workers, natom_threshold, element_fractions):
+def select_structures(nomix_dir, output_dir, csv_file, ef_threshold,
+                      min_total, max_total, num_workers, natom_threshold, element_fractions):
     os.makedirs(output_dir, exist_ok=True)
 
     structures_data = read_csv(csv_file, ef_threshold)

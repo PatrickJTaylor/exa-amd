@@ -138,8 +138,8 @@ def collate_pool(dataset_list):
         n_i = atom_fea.shape[0]  # number of atoms for this crystal
         batch_atom_fea.append(atom_fea)
         batch_nbr_fea.append(nbr_fea)
-        batch_nbr_fea_idx.append(nbr_fea_idx+base_idx)
-        new_idx = torch.LongTensor(np.arange(n_i)+base_idx)
+        batch_nbr_fea_idx.append(nbr_fea_idx + base_idx)
+        new_idx = torch.LongTensor(np.arange(n_i) + base_idx)
         crystal_atom_idx.append(new_idx)
         batch_target.append(target)
         batch_cif_ids.append(cif_id)
@@ -173,7 +173,7 @@ class GaussianDistance(object):
         """
         assert dmin < dmax
         assert dmax - dmin > step
-        self.filter = np.arange(dmin, dmax+step, step)
+        self.filter = np.arange(dmin, dmax + step, step)
         if var is None:
             var = step
         self.var = var
@@ -326,7 +326,7 @@ class CIFData(Dataset):
     def __getitem__(self, idx):
         cif_id, target = self.id_prop_data[idx]
         crystal = Structure.from_file(os.path.join(self.root_dir,
-                                                   cif_id+'.cif'))
+                                                   cif_id + '.cif'))
         atom_fea = np.vstack([self.ari.get_atom_fea(crystal[i].specie.number)
                               for i in range(len(crystal))])
         atom_fea = torch.Tensor(atom_fea)
@@ -351,11 +351,11 @@ class CIFData(Dataset):
                                [self.radius + 1.] * (self.max_num_nbr -
                                                      len(nbr)))
                 nbrcoords.append(list(map(lambda x: list(x[0].coords[:]), nbr)) +
-                                 [[0, 0, 0]]*(self.max_num_nbr-len(nbr)))
+                                 [[0, 0, 0]] * (self.max_num_nbr - len(nbr)))
             else:
 
-                nbr_fea_idx.append(4*list(map(lambda x: x[2],
-                                              nbr[:self.max_num_nbr])))
+                nbr_fea_idx.append(4 * list(map(lambda x: x[2],
+                                                nbr[:self.max_num_nbr])))
                 nbrcoords.append(
                     list(map(lambda x: list(x[0].coords[:]), nbr[:self.max_num_nbr])))
                 # nbr_fea.append(list(map(lambda x: x[1],
@@ -366,17 +366,17 @@ class CIFData(Dataset):
                     usrnbr1 = nbrcoords[ttttt][0]
                     usrnbr2 = nbrcoords[ttttt][i]
                     for j in range(3):
-                        usrnbr1[j] = usrnbr1[j]-sitecoord[ttttt][j]
-                        usrnbr2[j] = usrnbr2[j]-sitecoord[ttttt][j]
+                        usrnbr1[j] = usrnbr1[j] - sitecoord[ttttt][j]
+                        usrnbr2[j] = usrnbr2[j] - sitecoord[ttttt][j]
 
-                    sumtmp = math.sqrt(sum(map(lambda x: x*x, usrnbr1)))
-                    e1 = [aaa/sumtmp for aaa in usrnbr1]
-                    multmp = [aaa*bbb for aaa, bbb in zip(e1, usrnbr2)]
+                    sumtmp = math.sqrt(sum(map(lambda x: x * x, usrnbr1)))
+                    e1 = [aaa / sumtmp for aaa in usrnbr1]
+                    multmp = [aaa * bbb for aaa, bbb in zip(e1, usrnbr2)]
                     sumtmp = sum(multmp)
-                    multmp = [aaa*sumtmp for aaa in e1]
+                    multmp = [aaa * sumtmp for aaa in e1]
                     e2 = [aaa - bbb for aaa, bbb in zip(usrnbr2, multmp)]
-                    sumtmp = math.sqrt(sum(map(lambda x: x*x, e2)))
-                    e2 = [aaa/sumtmp for aaa in e2]
+                    sumtmp = math.sqrt(sum(map(lambda x: x * x, e2)))
+                    e2 = [aaa / sumtmp for aaa in e2]
                     e3 = list(np.cross(e1, e2))
                     if sumtmp == 0:
                         continue
@@ -403,7 +403,7 @@ class CIFData(Dataset):
                     ccc.append(nbrcoords[ttttt][i][2])
 
                 nbr_fea.append(
-                    list(map(lambda x: x[1], nbr[:self.max_num_nbr]))+aaa+bbb+ccc)
+                    list(map(lambda x: x[1], nbr[:self.max_num_nbr])) + aaa + bbb + ccc)
 
             ttttt += 1
         nbr_fea_idx, nbr_fea = np.array(nbr_fea_idx), np.array(nbr_fea)
