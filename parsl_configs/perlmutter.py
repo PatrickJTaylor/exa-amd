@@ -8,6 +8,10 @@ from parsl.launchers import SrunLauncher
 from parsl_configs.parsl_config_registry import register_parsl_config
 from parsl_configs.parsl_executors_labels import SINGLE_GPU_LABEL, CPU_SINGLE_LABEL
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5d3a127 (init exa-md)
 class PerlmutterPremiumConfig(Config):
     def __init__(self, json_config):
         """
