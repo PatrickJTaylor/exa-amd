@@ -41,7 +41,7 @@ class ConfigManager:
         "parsl_config": (str, "Parsl config name, previously registered (required).")
     }
 
-   # optional arguments: if absent, assign defaults.
+    # optional arguments: if absent, assign defaults.
     OPTIONAL_PARAMS = {
         "ef_thr": (-0.2, "ef threshold."),
         "num_workers": (128, "Number of OpenMP threads."),
