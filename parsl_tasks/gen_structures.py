@@ -1,9 +1,7 @@
 from parsl import bash_app
 from parsl_configs.parsl_executors_labels import GENERATE_EXECUTOR_LABEL
 
-
-@bash_app(executors=[GENERATE_EXECUTOR_LABEL])
-def gen_structures(config):
+def cmd_gen_structures(config):
     import os
     try:
         dir_structures = os.path.join(config["work_dir"], "structures")
@@ -19,3 +17,8 @@ def gen_structures(config):
 
     return "python {} --num_workers {} --input_dir {} --elements {}".format(
         dir_gen_structures, config["num_workers"], dir_mp_structures, config["elements"])
+
+@bash_app(executors=[GENERATE_EXECUTOR_LABEL])
+def gen_structures(config):
+    return cmd_gen_structures(config)
+    

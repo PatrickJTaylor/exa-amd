@@ -28,6 +28,18 @@ def _find_next_vasp_structure(work_dir):
 
 
 class ConfigManager:
+    """
+    Manages configuration settings loaded from the JSON config file and optionally overridden
+    by command-line arguments.
+
+    This class ensures that required parameters are present and valid, while applying
+    defaults for optional settings.
+
+    Example:
+        >>> config = ConfigManager("config.json")
+        >>> config["batch_size"]
+        256
+    """
     # required arguments: must exist in JSON config or be provided as cmd line
     REQUIRED_PARAMS = {
         "cms_dir": (str, "Path to the CMS directory (required)."),
@@ -141,7 +153,7 @@ class ConfigManager:
     def setup_vasp_calculations(self):
         """
         Calculate nstart and nend for VASP calculations.
-        All structures in [nstart, nend) will be run
+        All structures in [nstart, nend) will be run.
         """
         work_dir = self.config["work_dir"]
         structure_dir = os.path.join(self.config["work_dir"], "new")

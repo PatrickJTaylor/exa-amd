@@ -2,8 +2,7 @@ from parsl import python_app, bash_app, join_app
 from parsl_configs.parsl_executors_labels import VASP_EXECUTOR_LABEL
 
 
-@python_app(executors=[VASP_EXECUTOR_LABEL])
-def fused_vasp_calc(config, id, walltime=(int)):
+def cmd_fused_vasp_calc(config, id, walltime=(int)):
     import os
     import shutil
     import time
@@ -72,6 +71,11 @@ def fused_vasp_calc(config, id, walltime=(int)):
     except Exception as e:
         os.system(clean_work_dir)
         raise
+
+
+@python_app(executors=[VASP_EXECUTOR_LABEL])
+def fused_vasp_calc(config, id, walltime=(int)):
+    cmd_fused_vasp_calc(config, id, walltime)
 
 
 def run_vasp_calc(config, id):

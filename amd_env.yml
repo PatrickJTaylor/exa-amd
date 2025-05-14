@@ -11,3 +11,5 @@ dependencies:
     - pymatgen
     - parsl
     - pytest
+    - sphinx
+    - sphinx_rtd_theme
