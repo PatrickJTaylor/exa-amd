@@ -1,6 +1,14 @@
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
 *.py[cod]
+**/*.pyc
 cms_dir/mpstrs
 # Parsl logs
 runinfo
+# Sphinx build directory
+docs/build/
+# Doctree cache
+docs/source/.doctrees/
+# macOS metadata
+.DS_Store
+**/.DS_Store

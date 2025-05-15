@@ -3,6 +3,38 @@ from parsl_configs.parsl_executors_labels import VASP_EXECUTOR_LABEL
 
 
 def cmd_fused_vasp_calc(config, id, walltime=(int)):
+    """
+    Run a two-stage VASP calculation via a Python Parsl task.
+
+    It start by running a relaxation phase trying to find
+    the lowest-energy configuration. If relaxation was successful,
+    it runs the energy calculaction
+
+    Args:
+        config (ConfigManager or dict): Configuration object. The following fields are used:
+            - vasp_ntasks_per_run
+            - vasp_work_dir
+            - work_dir
+            - cms_dir
+            - vasp_std_exe
+            - vasp_timeout
+            - force_conv
+
+            See :class:`~tools.config_manager.ConfigManager` for field descriptions.
+
+        id (int): Identifier for the structure being processed. Used to name files and subdirectories.
+
+        walltime (int, optional): Timeout in seconds for each VASP run.
+
+    Raises:
+        VaspNonReached: If the relaxation step fails to reach the convergence threshold.
+        Exception: For general file I/O or execution failures.
+
+    Side Effects:
+        - Creates and modifies files in a per-structure working directory
+        - Executes VASP via shell command (`os.system`)
+        - Cleans intermediate VASP output files on completion or error
+    """
     import os
     import shutil
     import time

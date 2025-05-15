@@ -2,6 +2,17 @@ import sys
 
 
 class ExaAmdLogger:
+    """
+    Lightweight logging utility.
+
+    Supports five standard logging levels, in order of increasing severity:
+    DEBUG, INFO, WARNING, ERROR, and CRITICAL.
+
+    Args:
+        level_name (str, optional): Logging level name.
+        logger_name (str, optional): Name prefix for all log messages.
+    """
+
     LEVEL_MAP = {
         "DEBUG": 10,
         "INFO": 20,
@@ -16,7 +27,8 @@ class ExaAmdLogger:
 
     def configure(self, level_name="INFO"):
         """
-        if unsupported level, fall back to INFO
+        Set the logging level.
+        If unsupported level, fall back to INFO.
         """
         level_name = level_name.upper()
         if level_name in self.LEVEL_MAP:
@@ -50,18 +62,23 @@ class ExaAmdLogger:
             sys.exit(1)
 
     def debug(self, message):
+        """Log an debug-level message to stderr if permitted by current log level."""
         self._log("DEBUG", message)
 
     def info(self, message):
+        """Log an info-level message to stderr if permitted by current log level."""
         self._log("INFO", message)
 
     def warning(self, message):
+        """Log an warning-level message to stderr if permitted by current log level."""
         self._log("WARNING", message)
 
     def error(self, message):
+        """Log an error-level message to stderr if permitted by current log level."""
         self._log("ERROR", message)
 
     def critical(self, message):
+        """Log a critical-level message to stderr and terminate the program."""
         self._log("CRITICAL", message)
 
 

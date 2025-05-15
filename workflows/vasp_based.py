@@ -68,6 +68,34 @@ def run_cgcnn(config):
 
 
 def run_workflow(config):
+    """
+    Run the full VASP-based materials discovery workflow.
+
+    Consists of the following task-based steps (with a dependency between each step):
+
+    1. **Structure Generation**
+       :func:`~parsl_tasks.gen_structures.generate_structures`
+
+    2. **CGCNN Prediction**
+       :func:`~parsl_tasks.cgcnn.run_cgcnn`.
+
+    3. **Structure Selection**
+       :func:`~parsl_tasks.cgcnn.select_structures`.
+
+    4. **VASP Calculations**
+       :func:`~parsl_tasks.vasp.vasp_calculations`
+
+    Args:
+        config (ConfigManager): The configuration manager that provides runtime parameters,
+            paths, and thresholds for each stage of the workflow.
+
+    Side Effects:
+        - Creates directories and files under `config["work_dir"]`
+        - Executes multiple shell commands and external applications
+
+    Raises:
+        Exception: If any sub-stage raises an error that is not internally handled.
+    """
     amd_logger.info("Start the 'vasp_based' workflow'")
 
     if not os.path.exists(os.path.join(

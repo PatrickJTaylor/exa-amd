@@ -9,7 +9,25 @@ from parsl_configs.parsl_config_registry import register_parsl_config
 from parsl_configs.parsl_executors_labels import *
 
 
-class PerlmutterPremiumConfig(Config):
+class PerlmutterConfig(Config):
+    """
+    Parsl configuration for running exa-AMD on Perlmutter.
+
+    This configuration defines four Parsl executors, each targeting a different part of the
+    exa-AMD workflow and resource type:
+
+    - **Generate Structures Executor** (`generate_structures_executor`): run on CPU, single-node.
+    - **CGCNN Executor** (`cgcnn_executor`): run on GPU, single-node.
+    - **Select Structures Executor** (`select_structures_executor`): run on CPU, single-node.
+    - **VASP Executor** (`vasp_executor`): run on GPU, multi-node.
+
+    Args:
+        json_config (dict)
+            Required keys:
+                - ``vasp_nnodes`` (int): Number of GPU nodes to use for VASP calculations.
+                - ``num_workers`` (int): Number of workers to allocate per CPU node.
+    """
+
     def __init__(self, json_config):
         """
           - json_config["vasp_nnodes"] (int): number of GPU nodes used for VASP calculations
@@ -100,4 +118,4 @@ class PerlmutterPremiumConfig(Config):
 
 
 # Register the perlmutter configs
-register_parsl_config("perlmutter_premium", PerlmutterPremiumConfig)
+register_parsl_config("perlmutter_premium", PerlmutterConfig)
