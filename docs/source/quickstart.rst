@@ -40,7 +40,7 @@ Run the tests
 
 
 Using a JSON Configuration File
-===============================
+-------------------------------
 
 The recommended way to configure exa-AMD is through a JSON configuration file.
 It specifies all the required and optional parameters for running the workflow.
@@ -70,7 +70,7 @@ Here is an example configuration file for the Perlmutter system:
 You can create multiple configuration files for different systems, workloads, or experiments.
 
 Command-line Usage
-==================
+------------------
 
 You can override any field from the JSON configuration using command-line arguments:
 

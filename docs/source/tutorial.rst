@@ -39,7 +39,7 @@ If you do not already have it:
 
 Once downloaded, extract the archive and place the resulting `potpaw_PBE` directory anywhere on your system. You will reference its location in your JSON config using the ``pot_dir`` parameter.
 
-Next, download and extract the **`mpstrs`** dataset — a set of initial crystal structures used by the workflow. Place the `mpstrs/` directory inside the project’s `cms_dir/` folder:
+Next, download and extract the **`mpstrs`** dataset, a set of initial crystal structures used by the workflow. Place the `mpstrs/` directory inside the project’s `cms_dir/` folder:
 
 .. code-block:: bash
 
@@ -52,7 +52,7 @@ Next, download and extract the **`mpstrs`** dataset — a set of initial crystal
 4. Prepare the JSON Configuration File
 ---------------------------------------
 
-Copy the default Perlmutter configuration to create your own:
+Copy the default Perlmutter configuration:
 
 .. code-block:: bash
 
@@ -81,9 +81,9 @@ Start by copying the default Perlmutter configuration:
 Then edit `my_perlmutter.py`:
 
 a. Change the registration name
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-At the bottom of the file, update the `register_parsl_config()` call to reflect the new config name. This value **must match** the value you will set in your JSON config file (the `"parsl_config"` field).
+At the bottom of the file, update `register_parsl_config()` to reflect the new config name. This value **have to match** the value you will set in your JSON config file (the `"parsl_config"` field).
 
 .. code-block:: python
 
@@ -104,7 +104,7 @@ The Perlmutter configuration defines **four separate executors**:
 For each executor, update the following fields in the `SlurmProvider`:
 
 - `account`: your NERSC allocation account (e.g., `"m1234"`)
-- `qos`: the QOS/priority tier for that job (e.g., `"regular"`, `"premium"`)
+- `qos`: the QOS for that job (e.g., `"regular"`, `"premium"`)
 
 .. code-block:: text
 
@@ -137,6 +137,11 @@ Make sure you update **all four** executors accordingly, using your appropriate 
 
    All Parsl configuration files **must be placed inside the** ``parsl_configs/`` **directory**.
    If you put your config file anywhere else, **exa-AMD will not be able to detect it**.
+
+
+For more information about possible Parsl configurations, see the official documentation [#parsl_docs]_.
+
+.. [#parsl_docs] https://parsl-project.org
 
 c. Update JSON Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
