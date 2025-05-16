@@ -32,10 +32,7 @@ bibliography: "exa_amd_joss.bib"
 
 exa-AMD is a Python-based workflow framework designed to accelerate the discovery and design of functional materials by integrating AI/ML tools, materials databases, and quantum mechanical calculations into scalable, high-performance workflows. The exacution model of exa-AMD relies on Parsl [@babuji2019parsl], a task-parallel programming library that enables the execution of distributed and heterogeneous workflows. exa-AMD is optimized for GPU-based supercomputing environments and has been successfully deployed on large-scale HPC systems.
 
-<div style="text-align: center;">
-  <img src="CeFeIn_prediction.png" alt="Prediction of new CeFeIn compounds" width="600px">
-  <p><em>Prediction of new CeFeIn compounds</em></p>
-</div>
+![Prediction of new CeFeIn compounds.](CeFeIn_prediction.png){ width=100%}
 
 # Statement of Need
 
