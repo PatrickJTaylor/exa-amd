@@ -33,4 +33,4 @@ jobs:
       - name: Run pytest
         run: |
           export PYTHONPATH=$(pwd):$PYTHONPATH
-          conda run -n amd_env pytest --disable-warnings -q
+          conda run -n amd_env pytest -s
