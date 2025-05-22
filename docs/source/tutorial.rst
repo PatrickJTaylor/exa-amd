@@ -1,7 +1,7 @@
 Tutorial
 ========
 
-This tutorial walks through how to set up and run exa-AMD on NERSC’s Perlmutter system, on the **GPU partition**. 
+This tutorial walks through how to set up and run exa-AMD on [NERSC’s Perlmutter supercomputer](https://docs.nersc.gov/systems/perlmutter/architecture/), on the **GPU partition**. 
 
 1. Clone the Repository
 ------------------------
@@ -136,7 +136,6 @@ Make sure you update **all four** executors accordingly, using your appropriate 
 .. important::
 
    All Parsl configuration files **must be placed inside the** ``parsl_configs/`` **directory**.
-   If you put your config file anywhere else, **exa-AMD will not be able to detect it**.
 
 
 For more information about possible Parsl configurations, see the official documentation [#parsl_docs]_.
@@ -146,7 +145,7 @@ For more information about possible Parsl configurations, see the official docum
 c. Update JSON Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After registering the new config, update your JSON config file to reference it:
+After registering the new Parsl configuration, update your JSON config file to reference it:
 
 .. code-block:: text
 
@@ -155,14 +154,14 @@ After registering the new config, update your JSON config file to reference it:
        "parsl_config": "my_perlmutter"
    }
 
-exa-AMD will now automatically discover and use your `my_perlmutter` configuration at runtime.
+exa-AMD will now automatically discover and use the `my_perlmutter` configuration at runtime.
 
 ----
 
 6. Run the Workflow
 ---------------------
 
-Once everything is configured, run the full exa-AMD workflow:
+Once everything is configured, run the full exa-AMD workflow from a logind node of Perlmutter:
 
 .. code-block:: bash
 

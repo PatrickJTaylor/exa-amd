@@ -5,6 +5,7 @@ channels:
     - defaults
 dependencies:
     - python = 3.12
+    - numpy<2.0
     - scikit-learn
     - pytorch
     - torchvision
