@@ -39,15 +39,7 @@ If you do not already have it:
 
 Once downloaded, extract the archive and place the resulting `potpaw_PBE` directory anywhere on your system. You will reference its location in your JSON config using the ``pot_dir`` parameter.
 
-Next, download and extract the **`mpstrs`** dataset, a set of initial crystal structures used by the workflow. Place the `mpstrs/` directory inside the project’s `cms_dir/` folder:
-
-.. code-block:: bash
-
-   exa-amd/
-   ├── cms_dir/
-   │   └── mpstrs/     ← Place the dataset here
-
-----
+Next, download and extract the **`initial_structures`** dataset which contains a set of initial crystal structures used by the workflow.
 
 4. Prepare the JSON Configuration File
 ---------------------------------------
@@ -60,10 +52,11 @@ Copy the default Perlmutter configuration:
 
 Edit the following fields in `my_config_perlmutter.json`:
 
-- `"cms_dir"`: Absolute path to your `cms_dir` directory (where `mpstrs/` is)
+- `"cms_dir"`: Absolute path to your `cms_dir` directory
 - `"work_dir"`: A scratch directory for intermediate files
 - `"vasp_work_dir"`: A work directory for running VASP calculations
 - `"pot_dir"`: Path to your `potpaw_PBE` directory
+- `"initial_structures"`: Path to the `initial_structures` directory (downloaded in the previous section)
 
 ----
 
@@ -125,11 +118,15 @@ Here is an example:
 .. code-block:: python
 
    provider=SlurmProvider(
-       account="your_gpu_account",    # ← CHANGE THIS
+       account="your_gpu_account",    # ← CHANGE IF NEEDED
        qos="your_gpu_qos",            # ← CHANGE IF NEEDED
        constraint="gpu",
        ...
    )
+
+.. note::
+
+   The account can also be specified at runtime via the command-line arguments.
 
 Make sure you update **all four** executors accordingly, using your appropriate account and qos for CPU and GPU resources.
 

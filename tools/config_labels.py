@@ -16,6 +16,7 @@ class ConfigKeys:
     CPU_ACCOUNT = "cpu_account"
     GPU_ACCOUNT = "gpu_account"
     CONFIG_FILE = "config"
+    INITIAL_STRS = "initial_structures_dir"
 
     # optional
     EF_THR = "formation_energy_threshold"

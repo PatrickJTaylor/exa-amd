@@ -48,7 +48,9 @@ class ConfigManager:
         CK.OUTPUT_FILE: (str, "Output file name for storing the result of the VASP calculations (required)."),
         CK.ELEMENTS: (str, "Elements, e.g. 'Ce-Co-B' (required)."),
         CK.PARSL_CONFIG: (
-            str, "Parsl config name, previously registered (required).")
+            str, "Parsl config name, previously registered (required)."),
+        CK.INITIAL_STRS: (
+            str, "Path to the directory that containts the initial crystal structures.")
     }
 
     # optional arguments: if absent, assign defaults.
@@ -61,7 +63,10 @@ class ConfigManager:
         CK.NUM_STRS: (-1, "Number of structures to be processed with VASP. (-1 means all)."),
         CK.VASP_TIMEOUT: (1800, "Max walltime in seconds for a VASP calculation."),
         CK.FORCE_CONV: (100, "VASP force convergence threshold."),
-        CK.OUTPUT_LEVEL: ("INFO", "Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL"),
+        CK.CPU_ACCOUNT: ("", "The cpu account name on the current machine (forwarded to the workload manager)."),
+        CK.GPU_ACCOUNT: ("", "The gpu account name on the current machine (forwarded to the workload manager)."),
+        CK.OUTPUT_LEVEL: (
+            "INFO", "Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL")
     }
 
     CONFIG_HELP_MSG = "Path to the JSON configuration file (required)."

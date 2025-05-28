@@ -10,8 +10,7 @@ def cmd_gen_structures(config):
 
     Prepares the working environment and generates the command to execute
     the CGCNN `cms_dir/gen_structure.py` script. This task generates
-    hypothetical structures based on the initial crystal structures provided
-    in `mpstrs`.
+    hypothetical structures based on the initial crystal structures.
 
     Args:
         config (dict): ConfigManager. The following fields are used:
@@ -31,7 +30,7 @@ def cmd_gen_structures(config):
     import os
     try:
         dir_structures = os.path.join(config[CK.WORK_DIR], "structures")
-        dir_mp_structures = os.path.join(config[CK.CMS_DIR], "mpstrs")
+        dir_mp_structures = config[CK.INITIAL_STRS]
         dir_gen_structures = os.path.join(
             config[CK.CMS_DIR], "gen_structure.py")
 

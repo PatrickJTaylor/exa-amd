@@ -6,6 +6,7 @@
     "elements": "Na-B-C",
     "formation_energy_threshold": -0.2,
     "num_workers": 128,
+    "initial_structures_dir":"/global/homes/m/moraru/Parsl-Project/exa-amd/cms_dir/mpstrs",
 
     "parsl_config": "perlmutter_premium",
 

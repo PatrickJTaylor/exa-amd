@@ -16,7 +16,7 @@ Prerequisites
 **Additionally:**
 
 - Ensure you have a working VASP installation
-- Ensure you have prepared the initial crystal structures in the Crystallographic Information File (CIF) format and put in a directory called mpstrs
+- Ensure you have prepared the initial crystal structures in the Crystallographic Information File (CIF) format
 
 .. _installation:
 
