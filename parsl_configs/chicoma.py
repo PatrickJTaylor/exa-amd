@@ -12,6 +12,7 @@ from parsl.launchers import SrunMPILauncher
 
 from parsl_configs.parsl_config_registry import register_parsl_config
 from parsl_configs.parsl_executors_labels import *
+from tools.config_labels import ConfigKeys as CK
 
 # environment to set before running a VASP calculation
 vasp_env_init = '''
@@ -40,12 +41,14 @@ vasp_cpu_env_init = '''
 class ChicomaConfig(Config):
     def __init__(self, json_config):
         """
-          - json_config["vasp_nnodes"] (int): number of GPU nodes used for VASP calculations
-          - json_config["num_workers"] (int): number of CPU workers per node
+          - json_config[CK.VASP_NNODES] (int): number of GPU nodes used for VASP calculations
+          - json_config[CK.NUM_WORKERS] (int): number of CPU workers per node
         """
 
-        nnodes_vasp = json_config["vasp_nnodes"]
-        num_workers = json_config["num_workers"]
+        nnodes_vasp = json_config[CK.VASP_NNODES]
+        num_workers = json_config[CK.NUM_WORKERS]
+        cpu_account = json_config[CK.CPU_ACCOUNT]
+        gpu_account = json_config[CK.GPU_ACCOUNT]
 
         # VASP executor
         vasp_executor = HighThroughputExecutor(
@@ -54,7 +57,7 @@ class ChicomaConfig(Config):
             available_accelerators=4,
             provider=SlurmProvider(
                 partition="gpu",
-                account="t25_ml-amd_g",
+                account=gpu_account,
                 init_blocks=0,
                 min_blocks=nnodes_vasp,
                 max_blocks=nnodes_vasp,
@@ -72,7 +75,7 @@ class ChicomaConfig(Config):
             available_accelerators=4,
             provider=SlurmProvider(
                 partition="gpu",
-                account="t25_ml-amd_g",
+                account=gpu_account,
                 init_blocks=0,
                 min_blocks=1,
                 max_blocks=1,
@@ -89,7 +92,7 @@ class ChicomaConfig(Config):
             cores_per_worker=num_workers,
             provider=SlurmProvider(
                 partition="standard",
-                account="t25_ml-amd",
+                account=cpu_account,
                 init_blocks=0,
                 min_blocks=1,
                 max_blocks=1,
@@ -106,7 +109,7 @@ class ChicomaConfig(Config):
             cores_per_worker=num_workers,
             provider=SlurmProvider(
                 partition="standard",
-                account="t25_ml-amd",
+                account=cpu_account,
                 init_blocks=0,
                 min_blocks=1,
                 max_blocks=1,
@@ -124,12 +127,12 @@ class ChicomaConfig(Config):
 class ChicomaConfigDebug(Config):
     def __init__(self, json_config):
         """
-          - json_config["vasp_nnodes"] (int): number of GPU nodes used for VASP calculations
-          - json_config["num_workers"] (int): number of CPU workers per node
+          - json_config[CK.VASP_NNODES] (int): number of GPU nodes used for VASP calculations
+          - json_config[CK.NUM_WORKERS] (int): number of CPU workers per node
         """
 
-        nnodes_vasp = json_config["vasp_nnodes"]
-        num_workers = json_config["num_workers"]
+        nnodes_vasp = json_config[CK.VASP_NNODES]
+        num_workers = json_config[CK.NUM_WORKERS]
 
         # VASP executor
         vasp_executor = HighThroughputExecutor(
@@ -212,12 +215,12 @@ class ChicomaConfigDebug(Config):
 class ChicomaConfigDebugCPU(Config):
     def __init__(self, json_config):
         """
-          - json_config["vasp_nnodes"] (int): number of GPU nodes used for VASP calculations
-          - json_config["num_workers"] (int): number of CPU workers per node
+          - json_config[CK.VASP_NNODES] (int): number of GPU nodes used for VASP calculations
+          - json_config[CK.NUM_WORKERS] (int): number of CPU workers per node
         """
 
-        nnodes_vasp = json_config["vasp_nnodes"]
-        num_workers = json_config["num_workers"]
+        nnodes_vasp = json_config[CK.VASP_NNODES]
+        num_workers = json_config[CK.NUM_WORKERS]
 
         # VASP executor
         vasp_executor = HighThroughputExecutor(

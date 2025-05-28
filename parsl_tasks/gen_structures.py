@@ -1,5 +1,7 @@
 from parsl import bash_app
+
 from parsl_configs.parsl_executors_labels import GENERATE_EXECUTOR_LABEL
+from tools.config_labels import ConfigKeys as CK
 
 
 def cmd_gen_structures(config):
@@ -28,10 +30,10 @@ def cmd_gen_structures(config):
     """
     import os
     try:
-        dir_structures = os.path.join(config["work_dir"], "structures")
-        dir_mp_structures = os.path.join(config["cms_dir"], "mpstrs")
+        dir_structures = os.path.join(config[CK.WORK_DIR], "structures")
+        dir_mp_structures = os.path.join(config[CK.CMS_DIR], "mpstrs")
         dir_gen_structures = os.path.join(
-            config["cms_dir"], "gen_structure.py")
+            config[CK.CMS_DIR], "gen_structure.py")
 
         if not os.path.exists(dir_structures):
             os.makedirs(dir_structures)
@@ -40,7 +42,7 @@ def cmd_gen_structures(config):
         raise
 
     return "python {} --num_workers {} --input_dir {} --elements {}".format(
-        dir_gen_structures, config["num_workers"], dir_mp_structures, config["elements"])
+        dir_gen_structures, config[CK.NUM_WORKERS], dir_mp_structures, config[CK.ELEMENTS])
 
 
 @bash_app(executors=[GENERATE_EXECUTOR_LABEL])

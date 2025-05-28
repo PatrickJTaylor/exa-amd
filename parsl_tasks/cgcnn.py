@@ -1,5 +1,7 @@
 from parsl import python_app, bash_app
+
 from parsl_configs.parsl_executors_labels import CGCNN_EXECUTOR_LABEL
+from tools.config_labels import ConfigKeys as CK
 
 
 def cmd_cgcnn_prediction(config):
@@ -27,21 +29,21 @@ def cmd_cgcnn_prediction(config):
     import os
     import shutil
     try:
-        os.chdir(config["work_dir"])
+        os.chdir(config[CK.WORK_DIR])
 
-        predict_script_path = os.path.join(config["cms_dir"], "predict.py")
-        model_path = os.path.join(config["cms_dir"], "form_1st.pth.tar")
+        predict_script_path = os.path.join(config[CK.CMS_DIR], "predict.py")
+        model_path = os.path.join(config[CK.CMS_DIR], "form_1st.pth.tar")
 
         dir_structures = os.path.join(
-            config["work_dir"], "structures")
-        atom_init_json = os.path.join(config["cms_dir"], "atom_init.json")
+            config[CK.WORK_DIR], "structures")
+        atom_init_json = os.path.join(config[CK.CMS_DIR], "atom_init.json")
 
         shutil.copy(atom_init_json, dir_structures)
     except Exception as e:
         raise
-    num_workers = config["num_workers"]
+    num_workers = config[CK.NUM_WORKERS]
     return "python {} {} {} --batch-size {} --workers {} ".format(
-        predict_script_path, model_path, dir_structures, config["batch_size"], num_workers)
+        predict_script_path, model_path, dir_structures, config[CK.BATCH_SIZE], num_workers)
 
 
 @bash_app(executors=[CGCNN_EXECUTOR_LABEL])

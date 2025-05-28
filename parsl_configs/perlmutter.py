@@ -7,6 +7,7 @@ from parsl.launchers import SrunLauncher
 
 from parsl_configs.parsl_config_registry import register_parsl_config
 from parsl_configs.parsl_executors_labels import *
+from tools.config_labels import ConfigKeys as CK
 
 
 class PerlmutterConfig(Config):
@@ -30,12 +31,14 @@ class PerlmutterConfig(Config):
 
     def __init__(self, json_config):
         """
-          - json_config["vasp_nnodes"] (int): number of GPU nodes used for VASP calculations
-          - json_config["num_workers"] (int): number of CPU workers per node
+          - json_config[CK.VASP_NNODES] (int): number of GPU nodes used for VASP calculations
+          - json_config[CK.NUM_WORKERS] (int): number of CPU workers per node
         """
 
-        nnodes_vasp = json_config["vasp_nnodes"]
-        num_workers = json_config["num_workers"]
+        nnodes_vasp = json_config[CK.VASP_NNODES]
+        num_workers = json_config[CK.NUM_WORKERS]
+        cpu_account = json_config[CK.CPU_ACCOUNT]
+        gpu_account = json_config[CK.GPU_ACCOUNT]
 
         # VASP executor
         vasp_executor = HighThroughputExecutor(
@@ -43,7 +46,7 @@ class PerlmutterConfig(Config):
             cores_per_worker=1,
             available_accelerators=4,
             provider=SlurmProvider(
-                account="m4802_g",
+                account=gpu_account,
                 qos="premium",
                 constraint="gpu",
                 init_blocks=0,
@@ -62,7 +65,7 @@ class PerlmutterConfig(Config):
             cores_per_worker=1,
             available_accelerators=4,
             provider=SlurmProvider(
-                account="m4802_g",
+                account=gpu_account,
                 qos="premium",
                 constraint="gpu",
                 init_blocks=0,
@@ -81,7 +84,7 @@ class PerlmutterConfig(Config):
             cores_per_worker=num_workers,
             max_workers_per_node=1,
             provider=SlurmProvider(
-                account="m4802",
+                account=cpu_account,
                 qos="premium",
                 constraint="cpu",
                 init_blocks=0,
@@ -100,7 +103,7 @@ class PerlmutterConfig(Config):
             cores_per_worker=num_workers,
             max_workers_per_node=1,
             provider=SlurmProvider(
-                account="m4802",
+                account=cpu_account,
                 qos="premium",
                 constraint="cpu",
                 init_blocks=0,

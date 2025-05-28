@@ -6,13 +6,14 @@ from parsl.app.errors import AppTimeout
 from parsl.app.errors import BashExitFailure
 from tools.logging_config import amd_logger
 from tools.config_manager import ConfigManager
+from tools.config_labels import ConfigKeys as CK
 
 
 def vasp_calculations(config):
     from parsl_tasks.dft_optimization import run_vasp_calc
-    work_dir = config["work_dir"]
+    work_dir = config[CK.WORK_DIR]
     output_file_vasp_calc = os.path.join(
-        config["vasp_work_dir"], config["output_file"])
+        config[CK.VASP_WORK_DIR], config[CK.OUTPUT_FILE])
 
     # open the output file to log the structures that failed or succeded to
     # converge
@@ -90,7 +91,7 @@ def run_workflow(config):
             paths, and thresholds for each stage of the workflow.
 
     Side Effects:
-        - Creates directories and files under `config["work_dir"]`
+        - Creates directories and files under `config[CK.WORK_DIR]`
         - Executes multiple shell commands and external applications
 
     Raises:
@@ -99,16 +100,16 @@ def run_workflow(config):
     amd_logger.info("Start the 'vasp_based' workflow'")
 
     if not os.path.exists(os.path.join(
-            config["work_dir"], 'structures/1.cif')):
+            config[CK.WORK_DIR], 'structures/1.cif')):
         generate_structures(config)
     amd_logger.info(f"generate_structures done")
 
     if not os.path.exists(os.path.join(
-            config["work_dir"], 'test_results.csv')):
+            config[CK.WORK_DIR], 'test_results.csv')):
         run_cgcnn(config)
     amd_logger.info(f"cgcnn done")
 
-    if not os.path.exists(os.path.join(config["work_dir"], 'new/POSCAR_1')):
+    if not os.path.exists(os.path.join(config[CK.WORK_DIR], 'new/POSCAR_1')):
         select_structures(config)
     amd_logger.info(f"select structures done")
 

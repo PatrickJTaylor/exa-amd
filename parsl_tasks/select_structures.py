@@ -1,5 +1,7 @@
 from parsl import bash_app
+
 from parsl_configs.parsl_executors_labels import SELECT_EXECUTOR_LABEL
+from tools.config_labels import ConfigKeys as CK
 
 
 def cmd_select_structures(config):
@@ -27,17 +29,17 @@ def cmd_select_structures(config):
     """
     import os
     try:
-        os.chdir(config["work_dir"])
+        os.chdir(config[CK.WORK_DIR])
 
-        tr_csv_file = os.path.join(config["work_dir"], "test_results.csv")
-        dir_structures = os.path.join(config["work_dir"], "structures")
+        tr_csv_file = os.path.join(config[CK.WORK_DIR], "test_results.csv")
+        dir_structures = os.path.join(config[CK.WORK_DIR], "structures")
         dir_select_structure = os.path.join(
-            config["cms_dir"], "select_structure.py")
+            config[CK.CMS_DIR], "select_structure.py")
 
     except Exception as e:
         raise
     return "python {} --ef_threshold {} --num_workers {} --csv_file {} --nomix_dir {}".format(
-        dir_select_structure, str(config["ef_thr"]), config["num_workers"], tr_csv_file, dir_structures)
+        dir_select_structure, str(config[CK.EF_THR]), config[CK.NUM_WORKERS], tr_csv_file, dir_structures)
 
 
 @bash_app(executors=[SELECT_EXECUTOR_LABEL])

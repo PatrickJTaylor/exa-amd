@@ -2,7 +2,9 @@ import sys
 import os
 import json
 import pytest
+
 from tools.config_manager import ConfigManager
+from tools.config_labels import ConfigKeys as CK
 
 #
 # Helpers
@@ -55,16 +57,16 @@ def test_valid_config(tmp_path, monkeypatch):
     config_file.write_text(json.dumps(complete_config))
 
     # Simulate command-line arguments
-    cmd_args = ["python amd.py", "--config", str(config_file)]
+    cmd_args = ["python exa_amd.py", "--config", str(config_file)]
     monkeypatch.setattr(sys, "argv", cmd_args)
 
     config = ConfigManager()
 
     # Verify the configuration values are as expected.
     for key in all_config_keys:
-        if "work_dir" in key:
+        if CK.WORK_DIR in key:
             assert config[key] == os.path.join(
-                complete_config[key], complete_config["elements"])
+                complete_config[key], complete_config[CK.ELEMENTS])
         else:
             assert config[key] == complete_config[key]
 
@@ -81,7 +83,7 @@ def test_missing_required_parameters(
     config_file = tmp_path / "bad_config.json"
     config_file.write_text(json.dumps(config_data))
 
-    cmd_args = ["python amd.py", "--config", str(config_file)]
+    cmd_args = ["python exa_amd.py", "--config", str(config_file)]
     monkeypatch.setattr(sys, "argv", cmd_args)
 
     # Expect a ValueError
@@ -99,7 +101,7 @@ def test_command_line_args_override(tmp_path, monkeypatch, config_key):
     override_value = gen_dummy_value(complete_config[config_key], diff=True)
 
     cmd_args = [
-        "python amd.py",
+        "python exa_amd.py",
         "--config", str(config_file),
         "--" + config_key, str(override_value)
     ]
@@ -108,11 +110,11 @@ def test_command_line_args_override(tmp_path, monkeypatch, config_key):
 
     config = ConfigManager()
 
-    if "work_dir" in config_key:
+    if CK.WORK_DIR in config_key:
         assert config[config_key] != os.path.join(
-            complete_config[config_key], complete_config["elements"])
+            complete_config[config_key], complete_config[CK.ELEMENTS])
         assert config[config_key] == os.path.join(
-            override_value, complete_config["elements"])
+            override_value, complete_config[CK.ELEMENTS])
     else:
         assert config[config_key] != complete_config[config_key]
         assert config[config_key] == override_value

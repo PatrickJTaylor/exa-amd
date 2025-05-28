@@ -4,6 +4,8 @@ import os
 import sys
 import re
 
+from tools.config_labels import ConfigKeys as CK
+
 
 def _find_next_vasp_structure(work_dir):
     """Helper: Find what should be the next VASP calculation"""
@@ -35,66 +37,72 @@ class ConfigManager:
     This class ensures that required parameters are present and valid, while applying
     defaults for optional settings.
 
-    Example:
-        >>> config = ConfigManager("config.json")
-        >>> config["batch_size"]
-        256
     """
     # required arguments: must exist in JSON config or be provided as cmd line
     REQUIRED_PARAMS = {
-        "cms_dir": (str, "Path to the CMS directory (required)."),
-        "vasp_std_exe": (str, "Path to the VASP executable (required)."),
-        "work_dir": (str, "Root working directory (required)."),
-        "vasp_work_dir": (str, "Working directory for VASP-specific operations (required)."),
-        "pot_dir": (str, "Path to potpaw (required)."),
-        "output_file": (str, "Output file path (required)."),
-        "elements": (str, "Elements, e.g. 'Ce-Co-B' (required)."),
-        "parsl_config": (str, "Parsl config name, previously registered (required).")
+        CK.CMS_DIR: (str, "Path to the CMS directory (required)."),
+        CK.VASP_STD_EXE: (str, "VASP executable (required)."),
+        CK.WORK_DIR: (str, "Path to a work directory used for generating and selecting all the structures (required)."),
+        CK.VASP_WORK_DIR: (str, "Path to a work directory for VASP-specific operations (required)."),
+        CK.POT_DIR: (str, "Path to the PAW potentials directory containing kinetic energy densities for meta-GGA calculations (required)."),
+        CK.OUTPUT_FILE: (str, "Output file name for storing the result of the VASP calculations (required)."),
+        CK.ELEMENTS: (str, "Elements, e.g. 'Ce-Co-B' (required)."),
+        CK.PARSL_CONFIG: (
+            str, "Parsl config name, previously registered (required).")
     }
 
     # optional arguments: if absent, assign defaults.
     OPTIONAL_PARAMS = {
-        "ef_thr": (-0.2, "ef threshold."),
-        "num_workers": (128, "Number of OpenMP threads."),
-        "batch_size": (256, "Batch size for CGCNN."),
-        "vasp_nnodes": (1, "Number of nodes used for VASP calculations."),
-        "vasp_ntasks_per_run": (1, "Number of MPI processes per VASP calculation."),
-        "num_strs": (-1, "Number of structures to process (-1 means all)."),
-        "vasp_timeout": (1800, "Max walltime in seconds for a vasp calculation."),
-        "force_conv": (100, "Force convergence threshold."),
-        "output_level": ("INFO", "Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL"),
+        CK.EF_THR: (-0.2, "A formation energy threshold used for selecting the structures, after the CGCNN prediction."),
+        CK.NUM_WORKERS: (128, "Number of threads used for generating, predicting and selecting the structures."),
+        CK.BATCH_SIZE: (256, "Batch size for CGCNN."),
+        CK.VASP_NNODES: (1, "Number of nodes used for VASP calculations."),
+        CK.VASP_NTASKS_PER_RUN: (1, "Number of MPI processes per VASP calculation (useful for CPU-only Parsl configurations)."),
+        CK.NUM_STRS: (-1, "Number of structures to be processed with VASP. (-1 means all)."),
+        CK.VASP_TIMEOUT: (1800, "Max walltime in seconds for a VASP calculation."),
+        CK.FORCE_CONV: (100, "VASP force convergence threshold."),
+        CK.OUTPUT_LEVEL: ("INFO", "Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL"),
     }
+
+    CONFIG_HELP_MSG = "Path to the JSON configuration file (required)."
+    HELP_DESCRIPTION = "Override JSON config fields with command line arguments."
 
     def __init__(self):
         """
         Load the json config and apply the cmd line arguments.
         Check if all the required arguments were provided.
         """
+
+        self._early_help()
         # Preliminary parser for -config (read only the JSON path)
         config_parser = argparse.ArgumentParser(add_help=False)
         config_parser.add_argument(
-            "--config",
+            f"--{CK.CONFIG_FILE}",
             type=str,
-            default="configs/chicoma.json",
-            help="Path to the JSON configuration file (default: configs/chicoma.json)"
+            default=None,
+            help=self.CONFIG_HELP_MSG
         )
         config_args, remaining_args = config_parser.parse_known_args()
         self.config_path = config_args.config
 
         # Load JSON config
-        if not os.path.exists(self.config_path):
-            print(f"Config file {self.config_path} not found. Aborting.")
-            sys.exit(1)
-        try:
-            with open(self.config_path, "r") as f:
-                self.config = json.load(f)
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON config: {e}")
-            sys.exit(1)
+        if self.config_path is None:
+            config_parser.error(
+                "Please provide a json configuration file (e.g., --config my_config.json)")
+        else:
+            if not os.path.exists(self.config_path):
+                print(f"Config file {self.config_path} not found. Aborting.")
+                sys.exit(1)
+            try:
+                with open(self.config_path, "r") as f:
+                    self.config = json.load(f)
+            except json.JSONDecodeError as e:
+                print(f"Error decoding JSON config: {e}")
+                sys.exit(1)
 
         parser = argparse.ArgumentParser(
             parents=[config_parser],
-            description="Override JSON config fields with command line arguments."
+            description=self.HELP_DESCRIPTION
         )
 
         # Loop over REQUIRED_PARAMS
@@ -138,31 +146,64 @@ class ConfigManager:
 
         # Create/Update directories
         work_dir = os.path.join(
-            self.config["work_dir"], self.config["elements"])
+            self.config[CK.WORK_DIR], self.config[CK.ELEMENTS])
         if not os.path.exists(work_dir):
             os.makedirs(work_dir)
 
         vasp_work_dir = os.path.join(
-            self.config["vasp_work_dir"], self.config["elements"])
+            self.config[CK.VASP_WORK_DIR], self.config[CK.ELEMENTS])
         if not os.path.exists(vasp_work_dir):
             os.makedirs(vasp_work_dir)
 
-        self.config["work_dir"] = work_dir
-        self.config["vasp_work_dir"] = vasp_work_dir
+        self.config[CK.WORK_DIR] = work_dir
+        self.config[CK.VASP_WORK_DIR] = vasp_work_dir
+
+    def _early_help(self):
+        if "-h" in sys.argv or "--help" in sys.argv:
+            parser = argparse.ArgumentParser(
+                description=self.HELP_DESCRIPTION
+            )
+
+            parser.add_argument(
+                f"--{CK.CONFIG_FILE}",
+                type=str,
+                default=None,
+                help=self.CONFIG_HELP_MSG
+            )
+
+            # Loop over REQUIRED_PARAMS
+            for key, (arg_type, help_text) in self.REQUIRED_PARAMS.items():
+                parser.add_argument(
+                    f"--{key}",
+                    type=arg_type,
+                    default=None,  # We'll check existence later
+                    help=help_text
+                )
+
+            # Loop over OPTIONAL_PARAMS
+            for key, (default_val, help_text) in self.OPTIONAL_PARAMS.items():
+                arg_type = type(default_val)
+                parser.add_argument(
+                    f"--{key}",
+                    default=None,  # We'll assign defaults ourselves if needed
+                    type=arg_type,
+                    help=f"{help_text} (default='{default_val}')."
+                )
+            parser.parse_args()
 
     def setup_vasp_calculations(self):
         """
         Calculate nstart and nend for VASP calculations.
         All structures in [nstart, nend) will be run.
         """
-        work_dir = self.config["work_dir"]
-        structure_dir = os.path.join(self.config["work_dir"], "new")
+        work_dir = self.config[CK.WORK_DIR]
+        structure_dir = os.path.join(self.config[CK.WORK_DIR], "new")
         structure_files = [
             f for f in os.listdir(structure_dir) if f.startswith("POSCAR_")
         ]
         total_num_structures = len(structure_files)
-        num_strs = self.config["num_strs"]
-        nstart = _find_next_vasp_structure(self.config["vasp_work_dir"])
+        num_strs = self.config[CK.NUM_STRS]
+        nstart = _find_next_vasp_structure(self.config[CK.VASP_WORK_DIR])
 
         nend = total_num_structures + 1
         if num_strs != -1:
@@ -172,8 +213,8 @@ class ConfigManager:
         self.config["nend"] = nend
 
         # create the POTCAR file
-        POTDIR = self.config["pot_dir"]
-        ele1, ele2, ele3 = self.config["elements"].split("-")
+        POTDIR = self.config[CK.POT_DIR]
+        ele1, ele2, ele3 = self.config[CK.ELEMENTS].split("-")
         potcar_command = (
             f"cat {POTDIR}/{ele1}/POTCAR "
             f"{POTDIR}/{ele2}/POTCAR "

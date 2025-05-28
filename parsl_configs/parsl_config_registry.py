@@ -2,6 +2,8 @@
 import pkgutil
 import importlib
 
+from tools.config_labels import ConfigKeys as CK
+
 # Global registry mapping a config name to its Parsl config class.
 PARSL_CONFIG_REGISTRY = {}
 
@@ -70,7 +72,7 @@ def get_parsl_config(config):
     if not PARSL_CONFIG_REGISTRY:
         auto_register_configs("parsl_configs")
 
-    config_name = config["parsl_config"]
+    config_name = config[CK.PARSL_CONFIG]
     if config_name not in PARSL_CONFIG_REGISTRY:
         amd_logger.critical(
             f"Parsl config '{config_name}' is not registered. Registered configs: {
