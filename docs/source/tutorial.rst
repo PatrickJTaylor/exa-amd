@@ -39,7 +39,7 @@ If you do not already have it:
 
 Once downloaded, extract the archive and place the resulting `potpaw_PBE` directory anywhere on your system. You will reference its location in your JSON config using the ``pot_dir`` parameter.
 
-Next, download and extract the **`initial_structures`** dataset which contains a set of initial crystal structures used by the workflow.
+Next, `download <https://iastate.box.com/s/3swro78kbcd69fwamhk7df4n5rx4edae>`_ and extract the **`initial_structures`** dataset which contains a set of initial crystal structures used by the workflow.
 
 4. Prepare the JSON Configuration File
 ---------------------------------------
