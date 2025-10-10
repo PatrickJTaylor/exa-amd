@@ -3,7 +3,7 @@ from tools.config_labels import ConfigKeys as CK
 from parsl_configs.parsl_executors_labels import POSTPROCESSING_LABEL
 
 
-def cmd_compile_vasp_hull(config, total_calcs, output_file, prefix):
+def cmd_compile_vasp_hull(total_calcs, output_file, prefix):
     '''
     collect convex hull for all the structures
     '''
@@ -74,5 +74,5 @@ def cmd_compile_vasp_hull(config, total_calcs, output_file, prefix):
 
 
 @python_app(executors=[POSTPROCESSING_LABEL])
-def compile_vasp_hull(config, total_calcs, output_file, prefix):
-    return cmd_compile_vasp_hull(config, total_calcs, output_file, prefix)
+def compile_vasp_hull(total_calcs, output_file, prefix):
+    return cmd_compile_vasp_hull(total_calcs, output_file, prefix)

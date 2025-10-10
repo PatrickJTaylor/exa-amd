@@ -172,7 +172,6 @@ def get_vasp_hull(config):
 
         prefix = os.path.join(VASP_CALCS_DIR, f"calc_")
         err = compile_vasp_hull(
-            config,
             n_structures,
             output_file,
             prefix).exception()
