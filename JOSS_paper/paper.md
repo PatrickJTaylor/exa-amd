@@ -36,8 +36,10 @@ exa-AMD is a Python-based application designed to accelerate the discovery and d
 - **Modularity:** The workflow is composed of interchangeable task modules. New data sources, machine-learning models, or post-processing stages can be added or replaced while leaving the rest of the workflow unchanged.
 - **Scalability:** exa-AMD scales efficiently from a single workstation to many supercomputer nodes (internal benchmarks demonstrated a near-linear speed-up on up to 128 GPUs or 4,096 CPUs). 
 - **Elasticity:** computing resources can be added or released at run time, allowing the workflow to exploit shared supercomputers efficiently and assign dynamically specialized accelerators (e.g., GPUs) to different tasks.
-- **Resumability:** The workflow is divided into fine-grained tasks, allowing exa-AMD to track completed steps so that subsequent runs can resume from where it left off.
-- **Configurability:** exa-AMD exposes high-level configuration parameters to allow the users to balance performance and accuracy for their scientific objectives. In particular, the workflow supports multinary systems.
+- **Resumability\*:** The workflow is divided into fine-grained tasks, allowing exa-AMD to track completed steps so that subsequent runs can resume from where it left off.
+- **Configurability:** exa-AMD exposes high-level configuration parameters to allow the users to balance performance and accuracy for their scientific objectives. In particular, the workflow supports multinary systems. [^resumability]
+
+[^resumability]: *Scope of resumability.* exa-AMD does not implement classical checkpoint/restart. Instead, resumability arises from the workflow’s modular design: at runtime, exa-AMD detects the last completed phase and starts with the next one. For DFT stages, partially processed structure sets also resume automatically. For example, if a user processes the first 100 structures in one run, the next run begins at structure 101.
 
 ![Prediction of new CeFeIn compounds.](CeFeIn_prediction.png){ width=100%}
 
