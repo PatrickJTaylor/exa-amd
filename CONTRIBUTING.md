@@ -12,7 +12,7 @@ This document describes the conventions, expectations, and workflow for contribu
 1. Fork or branch:
    - If you don’t have write access, fork the repo and work on your fork.
    - If you do have write access, create a branch on this repo.
-   - Create a feature branch (e.g., `feature/new-dft-engine`).
+   - Create a feature branch (e.g., `feature/new-dft-engine`) or fix branch (e.g., `fix/vasp`).
 2. Implement changes following the coding, testing, and performance guidelines below.
 3. Add or update unit tests for new functionality (when feasible).
 4. Run all workflows in [`workflows/`](https://github.com/ML-AMD/exa-amd/tree/main/workflows) on the CeFeIn system:
@@ -41,16 +41,16 @@ This document describes the conventions, expectations, and workflow for contribu
 
 - Place tests under `tests/` using `pytest` conventions.
 - Write unit tests for all new functionality (when possible).
-- All PRs must pass tests locally and in CI.
+- All PRs/MRs must pass tests locally and in CI.
 - For components that rely on licensed tools (e.g., VASP):
-  - Validate via by running the [`workflows/`](https://github.com/ML-AMD/exa-amd/tree/main/workflows) on the CeFeIn system.
-  - Summarize manual validation steps and results in the PR description.
+  - Validate by running the [`workflows/`](https://github.com/ML-AMD/exa-amd/tree/main/workflows) on the CeFeIn system.
+  - Summarize manual validation steps and results in the PR/MR description.
 
 ---
 
 ## Performance Requirements
 
-Performance (how fast we explore new structures for a given system) is critical for exa-AMD:
+Performance is critical for exa-AMD:
 
 - Ensure every change does not degrade performance.
 - Optimize hardware usage:
@@ -66,7 +66,7 @@ Performance (how fast we explore new structures for a given system) is critical 
 - Add new dependencies only when strictly required.
 - Prefer existing dependencies and internal utilities:
   - Example: use Parsl for parallelism instead of adding `mpi4py` when feasible.
-- Document any new dependency in the PR description and pin it in `pyproject.toml` or `amd_env.yml`.
+- Document any new dependency in the PR/MR description and pin it in `pyproject.toml` or `amd_env.yml`.
 
 ---
 
